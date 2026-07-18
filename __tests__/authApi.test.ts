@@ -1,0 +1,2 @@
+import {authApi} from '../src/features/auth/api/authApi';
+describe('mock authentication',()=>{it('accepts documented demo credentials',async()=>{const result=await authApi.login('demo@enterprise.dev','Password123!');expect(result.success).toBe(true);});it('normalizes invalid credentials',async()=>{const result=await authApi.login('wrong@example.com','invalid!');expect(result).toMatchObject({success:false,error:{code:'UNAUTHORIZED'}});});});

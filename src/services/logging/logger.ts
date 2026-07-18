@@ -1,0 +1,1 @@
+export const logger = {debug: (...values: readonly unknown[]) => {if (__DEV__) console.debug('[app]', ...values);}, error: (...values: readonly unknown[]) => {if (__DEV__) console.error('[app]', ...values);}};

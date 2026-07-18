@@ -1,0 +1,1 @@
+import React from 'react'; import {ScreenContainer} from '@components/organisms'; import {ErrorState} from '@components/molecules'; export function GenericErrorScreen(){return <ScreenContainer><ErrorState message="An unexpected error occurred. Please try again."/></ScreenContainer>}

@@ -1,0 +1,1 @@
+import React from 'react'; import {ScreenContainer} from '@components/organisms'; import {LoadingIndicator, Text} from '@components/atoms'; export function SplashScreen(){return <ScreenContainer scroll={false}><Text variant="display">Enterprise</Text><LoadingIndicator label="Restoring session"/></ScreenContainer>;}

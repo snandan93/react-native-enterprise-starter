@@ -1,0 +1,1 @@
+import {z} from 'zod'; export const taskSchema=z.object({title:z.string().trim().min(3,'Enter at least 3 characters'),description:z.string().trim().min(10,'Enter at least 10 characters'),assignee:z.string().trim().min(2,'Choose an assignee'),status:z.enum(['todo','in-progress','done'])}); export type TaskValues=z.infer<typeof taskSchema>;
