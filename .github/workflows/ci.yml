@@ -9,8 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with: {node-version: 22, cache: yarn}
-      - run: corepack enable && yarn install --immutable
+        with:
+          node-version: 22
+      - name: Enable Yarn 4
+        run: corepack enable
+      - name: Install dependencies
+        run: yarn install --immutable
       - run: yarn typecheck
       - run: yarn lint
       - run: yarn test --runInBand
