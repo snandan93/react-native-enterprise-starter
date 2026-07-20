@@ -19,6 +19,12 @@ export const translations = {
     complete: 'complete',
     team: 'Team',
     offline: 'You are offline. Cached data is shown.',
+    environment: 'Environment',
+    development: 'Development',
+    staging: 'Staging',
+    production: 'Production',
+    environmentHint:
+      'Changing environment signs you out and clears server data.',
   },
   hi: {
     dashboard: 'डैशबोर्ड',
@@ -38,6 +44,12 @@ export const translations = {
     complete: 'पूर्ण',
     team: 'टीम',
     offline: 'आप ऑफ़लाइन हैं। कैश किया गया डेटा दिखाया जा रहा है।',
+    environment: 'वातावरण',
+    development: 'डेवलपमेंट',
+    staging: 'स्टेजिंग',
+    production: 'प्रोडक्शन',
+    environmentHint:
+      'वातावरण बदलने पर आप साइन आउट हो जाएंगे और सर्वर डेटा साफ़ हो जाएगा।',
   },
 } as const;
 

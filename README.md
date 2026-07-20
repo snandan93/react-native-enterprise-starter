@@ -7,6 +7,7 @@ A production-minded, open-source React Native CLI starter demonstrating a featur
 - Protected authentication with Keychain-backed session restoration, logout, refresh-token single-flight logic, and a replaceable mock API
 - Dashboard, task list/detail/create/edit, profile, settings, splash, offline, and generic error experiences
 - Typed design system, runtime light/dark/system themes, English and Hindi resources, accessibility semantics, and no inline screen styles
+- Typed development/staging/production profiles with a persisted runtime environment switch, dynamic API routing, and per-environment logging
 - TanStack Query caching, Redux Toolkit business state, Zustand UI preferences, MMKV persistence, NetInfo connectivity handling, and an offline mutation queue boundary
 - Axios normalization and cancellation support; raw transport errors never reach screens
 - Jest + Testing Library foundations, Detox smoke setup, strict TypeScript, ESLint, Prettier, Husky, lint-staged, and GitHub Actions
@@ -24,6 +25,22 @@ yarn ios # or yarn android
 
 Sign in with `demo@enterprise.dev` / `Password123!`. No backend is required.
 
+## Environment configuration
+
+Public mobile configuration is defined and type-checked in `src/app/config/env.ts`. Each profile includes an app name, API base URL, request timeout, log level, and mock API flag. All starter profiles use the included mock APIs so environment switching can be tested without a backend. After replacing a profile's placeholder URL with a working server, set its `useMockApi` value to `false` to route authentication and task requests to that server.
+
+Authenticated users can switch profiles from **Settings → Environment** without rebuilding the app. A switch is persisted across launches and immediately affects new requests. It also clears the React Query cache and secure session, then signs the user out, preventing data or credentials from one environment being reused in another.
+
+Update the placeholder URLs in `environmentProfiles` before connecting a backend. The expected example endpoints are:
+
+- `POST /auth/login`
+- `POST /auth/forgot-password`
+- `POST /auth/refresh`
+- `GET /tasks` and `GET /tasks/:id`
+- `POST /tasks` and `PUT /tasks/:id`
+
+The `.env*.example` files document equivalent values for CI and local tooling. Real `.env` files are ignored by Git. They are not loaded into the runtime profile registry because runtime switching requires every public profile to be bundled. Do not bundle private API keys, signing credentials, or service-account secrets in a mobile application; store them on the backend or in your CI secret store.
+
 ## Architecture
 
 Code is grouped by business feature. A feature owns its API, hooks, schemas, store, types, components, and screens. Shared UI contains only domain-neutral components. Services define infrastructure boundaries that can be replaced without changing screens.
@@ -35,11 +52,11 @@ State has deliberate ownership:
 - **Zustand**: small UI-only preferences such as theme and transient toast state.
 - **Component state**: ephemeral state local to a view, including confirmation visibility.
 
-Aliases (`@app`, `@features`, `@components`, `@services`, `@theme`, `@utils`, `@types`, `@hooks`) are configured in TypeScript, Babel, and Jest.
+Aliases (`@app`, `@features`, `@components`, `@services`, `@theme`, `@utils`, `@types`, `@hooks`, `@localization`) are configured in TypeScript, Babel, and Jest.
 
 ## Replacing the mock backend
 
-Implement the same typed contracts exposed by `src/features/*/api`, switch `useMockApi` in `src/app/config/env.ts`, and route calls through `safeRequest` in `src/services/api/client.ts`. Configure the base URL through your environment solution in real deployments; never commit production secrets. The Axios client injects access tokens and coordinates concurrent 401 responses through one refresh promise before retrying each original request once.
+Implement the same typed contracts exposed by `src/features/*/api` and update the typed profiles in `src/app/config/env.ts`. The Axios client resolves the selected base URL and timeout for every request, injects access tokens, and coordinates concurrent 401 responses through one refresh promise before retrying each original request once.
 
 ## Security notes
 
